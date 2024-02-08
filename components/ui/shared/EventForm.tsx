@@ -27,7 +27,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
 
 import { IEvent } from "@/lib/database/modals/event.modal";
-import { createEvent } from "@/lib/actions/event.actions";
+import { createEvent, updateEvent } from "@/lib/actions/event.actions";
 
 type EventFormProps = {
   authorId: string;
@@ -89,7 +89,7 @@ const EventForm = ({ authorId, type, event, eventId }: EventFormProps) => {
       }
       try {
         const updatedEvent = await updateEvent({
-          userId,
+          authorId,
           event: { ...values, imageUrl: uploadedImageUrl, _id: eventId },
           path: `/events/${eventId}`,
         });
