@@ -1,10 +1,11 @@
 "use server";
 
-import { CreateEventParams } from "@/types";
+import { CreateEventParams, UpdateEventParams } from "@/types";
 import { handleError } from "../utils";
 import { connectToDatabase } from "../database";
 import Author from "../database/modals/author.modal";
 import Event from "../database/modals/event.modal";
+import { revalidatePath } from "next/cache";
 
 export const createEvent = async ({
   event,
@@ -30,3 +31,30 @@ export const createEvent = async ({
     handleError(error);
   }
 };
+
+// UPDATE
+export async function updateEvent({
+  authorId,
+  event,
+  path,
+}: UpdateEventParams) {
+  try {
+    await connectToDatabase();
+
+    const eventToUpdate = await Event.findById(event._id);
+    if (!eventToUpdate || eventToUpdate.organizer.toHexString() !== authorId) {
+      throw new Error("Unauthorized or event not found");
+    }
+
+    const updatedEvent = await Event.findByIdAndUpdate(
+      event._id,
+      { ...event, category: event.categoryId },
+      { new: true }
+    );
+    revalidatePath(path);
+
+    return JSON.parse(JSON.stringify(updatedEvent));
+  } catch (error) {
+    handleError(error);
+  }
+}
