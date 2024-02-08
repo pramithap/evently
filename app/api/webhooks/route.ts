@@ -1,7 +1,11 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { WebhookEvent } from "@clerk/nextjs/server";
-import { createUser, deleteUser, updateUser } from "@/lib/actions/user.actions";
+import {
+  createAuthor,
+  deleteAuthor,
+  updateAuthor,
+} from "@/lib/actions/author.actions";
 import { clerkClient } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
@@ -68,7 +72,8 @@ export async function POST(req: Request) {
       photo: image_url,
     };
 
-    const newUser = await createUser(user);
+    console.log("user ################# " + user);
+    const newUser = await createAuthor(user);
 
     if (newUser) {
       await clerkClient.users.updateUserMetadata(id, {
@@ -91,7 +96,7 @@ export async function POST(req: Request) {
       photo: image_url,
     };
 
-    const updatedUser = await updateUser(id, user);
+    const updatedUser = await updateAuthor(id, user);
 
     return NextResponse.json({ message: "OK", user: updatedUser });
   }
@@ -99,7 +104,7 @@ export async function POST(req: Request) {
   if (eventType === "user.deleted") {
     const { id } = evt.data;
 
-    const deletedUser = await deleteUser(id!);
+    const deletedUser = await deleteAuthor(id!);
 
     return NextResponse.json({ message: "OK", user: deletedUser });
   }

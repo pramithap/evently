@@ -1,5 +1,5 @@
-// ====== USER PARAMS
-export type CreateUserParams = {
+// ====== Author PARAMS
+export type CreateAuthorParams = {
   clerkId: string;
   firstName: string;
   lastName: string;
@@ -8,7 +8,7 @@ export type CreateUserParams = {
   photo: string;
 };
 
-export type UpdateUserParams = {
+export type UpdateAuthorParams = {
   firstName: string;
   lastName: string;
   username: string;
@@ -17,7 +17,7 @@ export type UpdateUserParams = {
 
 // ====== EVENT PARAMS
 export type CreateEventParams = {
-  userId: string;
+  authorId: string;
   event: {
     title: string;
     description: string;
@@ -34,7 +34,7 @@ export type CreateEventParams = {
 };
 
 export type UpdateEventParams = {
-  userId: string;
+  authorId: string;
   event: {
     _id: string;
     title: string;
@@ -63,8 +63,8 @@ export type GetAllEventsParams = {
   page: number;
 };
 
-export type GetEventsByUserParams = {
-  userId: string;
+export type GetEventsByAuthorParams = {
+  authorId: string;
   limit?: number;
   page: number;
 };
@@ -125,8 +125,8 @@ export type GetOrdersByEventParams = {
   searchString: string;
 };
 
-export type GetOrdersByUserParams = {
-  userId: string | null;
+export type GetOrdersByAuthorParams = {
+  authorId: string | null;
   limit?: number;
   page: string | number | null;
 };
