@@ -68,7 +68,6 @@ const EventForm = ({ authorId, type, event, eventId }: EventFormProps) => {
     }
     if (type === "Create") {
       try {
-        console.log("create event called ");
         const newEvent = await createEvent({
           event: { ...values, imageUrl: uploadedImageUrl },
           authorId,
