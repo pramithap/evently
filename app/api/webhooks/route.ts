@@ -106,7 +106,7 @@ export async function POST(req: Request) {
     console.log("user deleted ###################### " + id);
     const deletedUser = await deleteAuthor(id!);
 
-    return NextResponse.json({ message: "OK", user: deletedUser });
+    return NextResponse.json({ message: id, user: deletedUser });
   }
 
   return new Response("", { status: 200 });
