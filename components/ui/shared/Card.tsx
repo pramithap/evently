@@ -4,6 +4,7 @@ import { auth } from "@clerk/nextjs";
 import Link from "next/link";
 import Image from "next/image";
 import { formatDateTime } from "@/lib/utils";
+import { DeleteConfirmation } from "./DeleteConfirmation";
 
 type CardProps = {
   event: IEvent;
@@ -42,7 +43,7 @@ const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
             />
           </Link>
 
-          {/* <DeleteConfirmation eventId={event._id} /> */}
+          <DeleteConfirmation eventId={event._id} />
         </div>
       )}
 
