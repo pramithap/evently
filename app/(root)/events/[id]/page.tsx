@@ -21,6 +21,8 @@ const EventDetails = async ({
     page: searchParams.page as string,
   });
 
+  console.log(relatedEvents);
+
   return (
     <>
       <section className="flex justify-center bg-primary-50 bg-dotted-pattern bg-contain">
@@ -56,7 +58,7 @@ const EventDetails = async ({
               </div>
             </div>
 
-            {/* <CheckoutButton event={event} /> */}
+            <CheckoutButton event={event} />
 
             <div className="flex flex-col gap-5">
               <div className="flex gap-2 md:gap-3">

@@ -2,9 +2,10 @@
 
 import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { IEvent } from "@/lib/database/modals/event.modal";
 import { Button } from "../button";
+import Checkout from "./Checkout";
 
 const CheckoutButton = ({ event }: { event: IEvent }) => {
   const { user } = useUser();
@@ -26,7 +27,7 @@ const CheckoutButton = ({ event }: { event: IEvent }) => {
           </SignedOut>
 
           <SignedIn>
-            {/* <Checkout event={event} userId={userId} /> */}
+            <Checkout event={event} userId={userId} />
           </SignedIn>
         </>
       )}

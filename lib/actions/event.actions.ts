@@ -164,3 +164,32 @@ export async function getAllEvents({
     handleError(error);
   }
 }
+
+// GET EVENTS BY ORGANIZER
+export async function getEventsByAuthor({
+  authorId,
+  limit = 6,
+  page,
+}: GetEventsByAuthorParams) {
+  try {
+    await connectToDatabase();
+
+    const conditions = { organizer: authorId };
+    const skipAmount = (page - 1) * limit;
+
+    const eventsQuery = Event.find(conditions)
+      .sort({ createdAt: "desc" })
+      .skip(skipAmount)
+      .limit(limit);
+
+    const events = await populateEvent(eventsQuery);
+    const eventsCount = await Event.countDocuments(conditions);
+
+    return {
+      data: JSON.parse(JSON.stringify(events)),
+      totalPages: Math.ceil(eventsCount / limit),
+    };
+  } catch (error) {
+    handleError(error);
+  }
+}
