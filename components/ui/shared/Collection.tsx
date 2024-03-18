@@ -1,6 +1,7 @@
 import { IEvent } from "@/lib/database/modals/event.modal";
 import React from "react";
 import Card from "./Card";
+import Pagination from "./Pagination";
 
 type CollectionProps = {
   data: IEvent[];
@@ -21,6 +22,7 @@ const Collection = ({
   limit,
   page,
   totalPages,
+  urlParamName,
 }: CollectionProps) => {
   return (
     <>
@@ -41,6 +43,13 @@ const Collection = ({
               );
             })}
           </ul>
+          {totalPages && totalPages > 1 && (
+            <Pagination
+              urlParamName={urlParamName}
+              page={page}
+              totalPages={totalPages}
+            />
+          )}
         </div>
       ) : (
         <div

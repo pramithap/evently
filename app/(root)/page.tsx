@@ -5,16 +5,23 @@ import Link from "next/link";
 import { auth } from "@clerk/nextjs";
 import Collection from "@/components/ui/shared/Collection";
 import { getAllEvents } from "@/lib/actions/event.actions";
+import Search from "@/components/ui/shared/Search";
+import { SearchParamProps } from "@/types";
+import CategoryFilter from "@/components/ui/shared/CategoryFilter";
 
-export default async function Home() {
+export default async function Home({ searchParams }: SearchParamProps) {
   const { sessionClaims } = auth();
 
   const userId = sessionClaims?.userId as string;
+  const page = Number(searchParams?.page) || 1;
+  const searchText = (searchParams.query as string) || "";
+  const category = (searchParams.category as string) || "";
 
+  console.log("searchText");
   const events = await getAllEvents({
-    query: "",
-    category: "",
-    page: 1,
+    query: searchText,
+    category,
+    page: page,
     limit: 6,
   });
 
@@ -52,11 +59,12 @@ export default async function Home() {
         className="wrapper my-8 flex flex-col gap-8 md:gap-12"
       >
         <h2 className="h2-bold">
-          Trust by <br /> Thousands of Events
+          Trusted by <br /> Thousands of Users
         </h2>
 
         <div className="flex w-full flex-col gap-5 md:flex-row">
-          Search CategoryFilter
+          <Search />
+          <CategoryFilter />
         </div>
         <Collection
           data={events?.data}
@@ -64,8 +72,8 @@ export default async function Home() {
           emptyStateSubtext="Come back later"
           collectionType="All_Events"
           limit={3}
-          page={1}
-          totalPages={2}
+          page={page}
+          totalPages={events?.totalPages}
         />
       </section>
     </>
