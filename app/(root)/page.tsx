@@ -17,15 +17,13 @@ export default async function Home({ searchParams }: SearchParamProps) {
   const searchText = (searchParams.query as string) || "";
   const category = (searchParams.category as string) || "";
 
-  console.log("searchText");
+  // Render the rest of the page even if the database is unreachable.
   const events = await getAllEvents({
     query: searchText,
     category,
     page: page,
     limit: 6,
-  });
-
-  //console.log(events);
+  }).catch(() => null);
 
   return (
     <>
@@ -67,9 +65,11 @@ export default async function Home({ searchParams }: SearchParamProps) {
           <CategoryFilter />
         </div>
         <Collection
-          data={events?.data}
-          emptyTitle="No Events Found"
-          emptyStateSubtext="Come back later"
+          data={events?.data ?? []}
+          emptyTitle={events ? "No Events Found" : "Events are unavailable"}
+          emptyStateSubtext={
+            events ? "Come back later" : "Please try again in a few minutes"
+          }
           collectionType="All_Events"
           limit={3}
           page={page}
