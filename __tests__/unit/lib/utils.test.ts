@@ -129,10 +129,8 @@ describe("handleError", () => {
     expect(() => handleError({ code: 11000 })).toThrow('{"code":11000}');
   });
 
-  // Error instances have no enumerable props, so the original message is lost.
-  it.failing("preserves the message of Error instances", () => {
-    expect(() => handleError(new Error("Author not found"))).toThrow(
-      "Author not found"
-    );
+  it("rethrows Error instances unchanged", () => {
+    const error = new Error("Author not found");
+    expect(() => handleError(error)).toThrow(error);
   });
 });

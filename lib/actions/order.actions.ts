@@ -81,7 +81,7 @@ export async function getOrdersByEvent({
     const orders = await Order.aggregate([
       {
         $lookup: {
-          from: "Authors",
+          from: "authors",
           localField: "buyer",
           foreignField: "_id",
           as: "buyer",
