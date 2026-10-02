@@ -41,6 +41,7 @@ describe("connectToDatabase", () => {
     expect(mongoose.connect).toHaveBeenCalledWith("mongodb://db:27017", {
       dbName: "devOVerflow",
       bufferCommands: false,
+      serverSelectionTimeoutMS: 5000,
     });
   });
 
@@ -51,5 +52,18 @@ describe("connectToDatabase", () => {
     await Promise.all([connectToDatabase(), connectToDatabase()]);
 
     expect(mongoose.connect).toHaveBeenCalledTimes(1);
+  });
+
+  it("retries on the next call after a failed connection", async () => {
+    const { connectToDatabase, mongoose } = await loadDb("mongodb://db:27017");
+    const conn = { name: "conn" };
+    mongoose.connect
+      .mockRejectedValueOnce(new Error("querySrv ENOTFOUND"))
+      .mockResolvedValueOnce(conn);
+
+    await expect(connectToDatabase()).rejects.toThrow("querySrv ENOTFOUND");
+    await expect(connectToDatabase()).resolves.toBe(conn);
+
+    expect(mongoose.connect).toHaveBeenCalledTimes(2);
   });
 });
