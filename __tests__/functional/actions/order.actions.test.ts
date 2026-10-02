@@ -173,9 +173,7 @@ describe("getOrdersByEvent", () => {
     ).resolves.toEqual([]);
   });
 
-  // The $lookup reads from "Authors" but Mongoose stores the Author model in
-  // the "authors" collection, so every order is dropped by $unwind.
-  it.failing("returns orders for the event filtered by buyer name", async () => {
+  it("returns orders for the event filtered by buyer name", async () => {
     const { buyer, event } = await seedOrder({ buyerName: ["Jane", "Buyer"] });
     const other = await makeAuthor({ firstName: "Bob", lastName: "Smith" });
     await Order.create([
