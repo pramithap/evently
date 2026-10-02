@@ -1,5 +1,5 @@
 import Stripe from "stripe";
-import { POST } from "@/app/api/webhooks/stripe/stripe";
+import { POST } from "@/app/api/webhooks/stripe/route";
 import { createOrder } from "@/lib/actions/order.actions";
 
 jest.mock("@/lib/actions/order.actions", () => ({ createOrder: jest.fn() }));
@@ -41,9 +41,10 @@ describe("Stripe webhook handler", () => {
     jest.clearAllMocks();
   });
 
-  it("reports a webhook error when the signature is invalid", async () => {
+  it("rejects requests with an invalid signature", async () => {
     const res = await POST(signedRequest(completedSession({}), "whsec_wrong"));
 
+    expect(res.status).toBe(400);
     expect((await res.json()).message).toBe("Webhook error");
     expect(createOrder).not.toHaveBeenCalled();
   });
